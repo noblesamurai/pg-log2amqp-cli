@@ -1,25 +1,7 @@
-# Pg-log2amqp-cli [![Build Status](https://secure.travis-ci.org/noblesamurai/pg-log2amqp-cli.png?branch=master)](http://travis-ci.org/noblesamurai/pg-log2amqp-cli) [![NPM version](https://badge-me.herokuapp.com/api/npm/pg-log2amqp-cli.png)](http://badges.enytc.com/for/npm/pg-log2amqp-cli)
-
-> Consume a knex-log and send it to amqp.
+# Pg-log2amqp-cli [![Build Status](https://api.travis-ci.org/noblesamurai/pg-log2amqp-cli.svg?branch=master)](http://travis-ci.org/noblesamurai/pg-log2amqp-cli)
 
 ## Purpose
-- What problem does this module solve? At least a few sentences.
-PLEASE_FILL_IN_HERE
-
-## Usage
-
-```js
-// Several examples of usage.
-// Usually copying and pasting code from the tests and making the code standalone suffices.
-// PLEASE_FILL_IN_HERE
-```
-
-## API
-
-PLEASE_FILL_IN_HERE
-
-Note: To regenerate this section from the jsdoc run `npm run docs` and paste
-the output above.
+- Add [knex-log](https://github.com/noblesamurai/knex-log/) messages onto an AMQP queue to be processed.
 
 ## Installation
 
@@ -28,6 +10,17 @@ This module is installed via npm:
 ``` bash
 $ npm install pg-log2amqp-cli
 ```
+
+## Usage
+
+```sh
+DATABASE_URL=postgres://user:pass@domain:5432/db \
+  DATABASE_TABLE_NAME=logs \
+  AMQP_URL=amqp://user:pass@domain:5672/vhost \
+  AMQP_SEARCH_QUEUE=logs \
+  npm start
+```
+
 ## License
 
 The BSD License
