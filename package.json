@@ -27,10 +27,10 @@
   "devDependencies": {
     "chai": "^3.5.0",
     "dirty-chai": "^1.2.2",
+    "jsdoc-to-markdown": "^4.0.0",
     "mocha": "^5.2.0",
-    "nyc": "^12.0.2",
-    "semistandard": "*",
-    "jsdoc-to-markdown": "^4.0.0"
+    "nyc": "^13.3.0",
+    "semistandard": "*"
   },
   "keywords": [],
   "nyc": {
@@ -45,12 +45,11 @@
     ]
   },
   "dependencies": {
-    "amqp-check-queue": "^1.0.0-init.0",
     "amqplib": "^0.5.2",
+    "json-stringify-safe": "^5.0.1",
     "knex": "^0.15.2",
     "knex-log": "^2.1.3",
     "pg": "^7.4.3",
-    "pg-query-stream": "^1.1.1",
-    "transform-stream-backpressure": "^1.0.0-init.0"
+    "pg-query-stream": "^1.1.1"
   }
 }
