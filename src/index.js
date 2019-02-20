@@ -6,14 +6,13 @@ const AmqpWritableStream = require('./amqp-writable-stream');
 const progress = require('progress-stream');
 const { LogFrame, CompositeLogView, RawLogView } = require('log-frame');
 const { ProgressBar } = require('logf-progress');
-const ms = require('pretty-ms');
 
 main();
 
 async function main () {
   try {
     const { count } = await knex(config.tableName).where('id', '>=', config.logOffset).count().first();
-    const ps = progress({ objectMode: true, length: parseInt(count), time: 1000 /* ms */ });
+    const ps = progress({ objectMode: true, length: parseInt(count), time: 1000 });
     const view = new CompositeLogView();
     const frame = new LogFrame();
     frame.view = view;
@@ -46,6 +45,7 @@ async function main () {
     write.on('finish', () => {
       bar.setProgress(1);
       label.content = ' - complete';
+      process.exit(0);
     });
   } catch (err) {
     fail(err);
@@ -55,8 +55,4 @@ async function main () {
 function fail (err) {
   console.error('failed', err);
   process.exit(1);
-}
-
-function end () {
-  process.exit(0);
 }
