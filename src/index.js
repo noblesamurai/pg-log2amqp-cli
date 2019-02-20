@@ -14,7 +14,7 @@ async function main () {
     const { count } = await knex(config.tableName).where('id', '>=', config.logOffset).count().first();
     const ps = progress({ objectMode: true, length: parseInt(count), time: 1000 });
     const view = new CompositeLogView();
-    const frame = new LogFrame();
+    const frame = new LogFrame({ hideCursor: true });
     frame.view = view;
     const bar = new ProgressBar();
     const label = new RawLogView();
@@ -42,11 +42,7 @@ async function main () {
 
     // begin...
     rs.pipe(ps).pipe(write).on('error', fail);
-    write.on('finish', () => {
-      bar.setProgress(1);
-      label.content = ' - complete';
-      process.exit(0);
-    });
+    write.on('finish', end);
   } catch (err) {
     fail(err);
   }
@@ -55,4 +51,8 @@ async function main () {
 function fail (err) {
   console.error('failed', err);
   process.exit(1);
+}
+
+function end () {
+  process.exit(0);
 }
