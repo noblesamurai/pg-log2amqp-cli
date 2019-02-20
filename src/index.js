@@ -9,7 +9,11 @@ main();
 async function main () {
   try {
     // create knex log stream
-    const rs = knexLog.createReadStream({ offset: { id: config.logOffset } });
+    const rs = knexLog.createReadStream({
+      offset: { id: config.logOffset }, // where to start reading logs from
+      batchSize: 16, // knex rows fetched at a time
+      highWaterMark: 16 // stream high watermark for backpressure
+    });
 
     // create amqp connection and write stream
     const conn = await amqp.connect(config.amqp.url);
