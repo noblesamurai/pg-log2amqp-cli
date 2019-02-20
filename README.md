@@ -8,7 +8,7 @@
 This module is installed via npm:
 
 ``` bash
-$ npm install pg-log2amqp-cli
+npm install pg-log2amqp-cli
 ```
 
 ## Usage
@@ -19,6 +19,13 @@ DATABASE_URL=
   AMQP_URL=
   AMQP_SEARCH_QUEUE=logs \
   npm start
+```
+
+This will queue everything from the very beginning. If you only want later results you can also
+set an id offset with:
+
+```sh
+LOG_OFFSET=1337
 ```
 
 ## License
