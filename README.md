@@ -1,4 +1,4 @@
-# Pg-log2amqp-cli [![Build Status](https://api.travis-ci.org/noblesamurai/pg-log2amqp-cli.svg?branch=master)](http://travis-ci.org/noblesamurai/pg-log2amqp-cli)
+# pg-log2amqp-cli
 
 ## Purpose
 - Add [knex-log](https://github.com/noblesamurai/knex-log/) messages onto an AMQP queue to be processed.
