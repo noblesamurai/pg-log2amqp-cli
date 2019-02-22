@@ -9,6 +9,6 @@ module.exports = class AmqpWritableStream extends Writable {
     channel.on('drain', () => this.emit('drain'));
   }
   write (chunk, encoding, callback) {
-    return this.channel.sendToQueue(this.queueName, Buffer.from(stringify(chunk)));
+    return this.channel.sendToQueue(this.queueName, Buffer.from(stringify(chunk)), callback);
   }
 };
