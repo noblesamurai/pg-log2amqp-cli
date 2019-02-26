@@ -1,33 +1,52 @@
-# Pg-log2amqp-cli [![Build Status](https://secure.travis-ci.org/noblesamurai/pg-log2amqp-cli.png?branch=master)](http://travis-ci.org/noblesamurai/pg-log2amqp-cli) [![NPM version](https://badge-me.herokuapp.com/api/npm/pg-log2amqp-cli.png)](http://badges.enytc.com/for/npm/pg-log2amqp-cli)
-
-> Consume a knex-log and send it to amqp.
+# pg-log2amqp-cli
 
 ## Purpose
-- What problem does this module solve? At least a few sentences.
-PLEASE_FILL_IN_HERE
-
-## Usage
-
-```js
-// Several examples of usage.
-// Usually copying and pasting code from the tests and making the code standalone suffices.
-// PLEASE_FILL_IN_HERE
-```
-
-## API
-
-PLEASE_FILL_IN_HERE
-
-Note: To regenerate this section from the jsdoc run `npm run docs` and paste
-the output above.
+- Add [knex-log](https://github.com/noblesamurai/knex-log/) messages onto an AMQP queue to be processed.
 
 ## Installation
 
 This module is installed via npm:
 
 ``` bash
-$ npm install pg-log2amqp-cli
+npm install pg-log2amqp-cli
 ```
+
+## Usage
+
+```sh
+DATABASE_URL=
+  DATABASE_TABLE_NAME=logs \
+  AMQP_URL=
+  AMQP_SEARCH_QUEUE=logs \
+  npm start
+```
+
+This will queue everything from the very beginning. If you only want later results you can also
+set an id offset with:
+
+```sh
+LOG_OFFSET=1337
+```
+
+## Backpressure
+
+Things to be aware of...
+- RabbitMQ has it's own backpressure. @see [RabbitMQ Flow Control](https://www.rabbitmq.com/flow-control.html).
+- `amqplib` also implement a kind of writable stream like backpressure. @see [amqplib Flow Control](http://www.squaremobius.net/amqp.node/channel_api.html#flowcontrol).
+- `knex-log` streams use [pg-query-stream](https://github.com/brianc/node-pg-query-stream)s which does manage backpressure but there are 2 different
+  configuration variables you might need to know about. `highWaterMark` is passed through to the underlying stream object to set it's backpressure
+  value. `batchSize` however determines how many rows come back from postgres at a time (and how many get pushed onto the stream). This means that
+  if the `highWaterMark` is low and the `batchSize` is high, the number of items in the queue will still be high.
+
+How we use these things...
+- We currently create our `knex-log` streams with `{ batchSize: 16, highWaterMark: 16 }` since log entries can be quite large (so we should only
+  have up to 35 entries max waiting in the knex log readable queue (usually 16 from experience since it drains all before fetching more).
+- We pass that into an `AmqpWritableStream` which publishes to the queue. Each write returns the (mock write stream) results of `sendToQueue()`
+  which will apply backpressure and stop writing if `false`. We also re-emit `drain` events from the AMQP channel to our stream to continue again
+  once we are able to.
+- From the AMQP side we are just relying on their build in flow control which will restrict the incomming bandwidth, which should slow our write
+  stream and knex log streams. I have done some basic testing locally and this does appear to be ok.
+
 ## License
 
 The BSD License
