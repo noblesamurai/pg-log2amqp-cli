@@ -1,3 +1,4 @@
+const config = require('./config');
 const { Writable } = require('stream');
 const stringify = require('json-stringify-safe');
 
@@ -12,6 +13,11 @@ module.exports = class AmqpWritableStream extends Writable {
     channel.on('drain', () => this.emit('drain'));
   }
   write (chunk, encoding, callback) {
+    if (typeof chunk !== 'object') return true; // chunk should be an object, return true to keep going.
+    if (config.requiredLogKey) { // check to see if the required log key is in this chunk
+      const logs = Array.isArray(chunk.value) ? chunk.value : chunk.value.logs;
+      if (!logs.some(log => Object.keys(log).includes(config.requiredLogKey))) return true;
+    }
     return this.channel.sendToQueue(this.queueName, Buffer.from(stringify(chunk)), callback);
   }
 };

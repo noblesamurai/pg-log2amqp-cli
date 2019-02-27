@@ -12,6 +12,7 @@ module.exports = {
   db: parseConnection(process.env.DATABASE_URL),
   tableName: process.env.DATABASE_TABLE_NAME,
   logOffset: parseInt(process.env.LOG_OFFSET) || 0,
+  requiredLogKey: process.env.REQUIRED_LOG_KEY,
   amqp: {
     url: process.env.AMQP_URL,
     queueName: process.env.AMQP_SEARCH_QUEUE
