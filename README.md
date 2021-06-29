@@ -14,9 +14,9 @@ npm install pg-log2amqp-cli
 ## Usage
 
 ```sh
-DATABASE_URL=
+DATABASE_URL=postgres://... \
   DATABASE_TABLE_NAME=logs \
-  AMQP_URL=
+  AMQP_URL=amqp://... \
   AMQP_SEARCH_QUEUE=logs \
   npm start
 ```
