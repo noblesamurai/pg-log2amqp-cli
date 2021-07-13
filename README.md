@@ -47,6 +47,20 @@ How we use these things...
 - From the AMQP side we are just relying on their build in flow control which will restrict the incomming bandwidth, which should slow our write
   stream and knex log streams. I have done some basic testing locally and this does appear to be ok.
 
+## Contributing
+
+### Prerequisites
+
+```
+$ pip install pre-commit
+```
+
+### Installation
+
+```
+$ pre-commit install --install-hooks
+```
+
 ## License
 
 The BSD License
