@@ -48,7 +48,7 @@
   "dependencies": {
     "amqplib": "^0.5.2",
     "json-stringify-safe": "^5.0.1",
-    "knex": "^0.15.2",
+    "knex": "^2.3.0",
     "knex-log": "^2.2.0-streamopts.0",
     "log-frame": "^1.0.5",
     "logf-progress": "^1.3.2",
